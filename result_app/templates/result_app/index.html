@@ -1,0 +1,112 @@
+{% extends 'result_app/base.html' %}
+{% load static %}
+
+{% block title %}Home - School Result Generator{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row align-items-center min-vh-75">
+        <div class="col-lg-6">
+            <h1 class="display-4 fw-bold mb-4" style="color: #1a5276;">
+                Generate Student Result Sheets
+                <span class="d-block text-primary">in One Click</span>
+            </h1>
+            <p class="lead mb-4">
+                Upload your Excel file with student results and get professionally designed, 
+                printable PDF result sheets for all students instantly.
+            </p>
+            
+<!-- In the home page content -->
+            <div class="d-grid gap-3 d-sm-flex">
+                {% if user.is_authenticated %}
+                <a href="{% url 'upload_excel' %}" class="btn btn-primary btn-lg px-4">
+                    <i class="fas fa-upload me-2"></i> Get Started
+                </a>
+                {% else %}
+                <a href="{% url 'login' %}" class="btn btn-primary btn-lg px-4">
+                    <i class="fas fa-sign-in-alt me-2"></i> Login to Start
+                </a>
+                {% endif %}
+                <a href="{% url 'download_sample_excel' %}" class="btn btn-outline-secondary btn-lg px-4">
+                    <i class="fas fa-download me-2"></i> Sample Excel
+                </a>
+            </div>
+            
+            <div class="mt-4">
+                <span class="badge bg-success me-2">Free</span>
+                <span class="badge bg-info me-2">No Registration</span>
+                <span class="badge bg-warning text-dark">Instant PDF</span>
+            </div>
+        </div>
+        <div class="col-lg-6 mt-5 mt-lg-0">
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-4 text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-file-excel text-success display-1"></i>
+                        <i class="fas fa-arrow-right text-primary display-4 mx-3"></i>
+                        <i class="fas fa-file-pdf text-danger display-1"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">How It Works</h5>
+                    <div class="row g-3 mt-3">
+                        <div class="col-4">
+                            <div class="p-3 bg-light rounded">
+                                <i class="fas fa-upload text-primary fs-2"></i>
+                                <p class="small mt-2 mb-0">Upload Excel</p>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="p-3 bg-light rounded">
+                                <i class="fas fa-sliders-h text-primary fs-2"></i>
+                                <p class="small mt-2 mb-0">Map Columns</p>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="p-3 bg-light rounded">
+                                <i class="fas fa-file-pdf text-primary fs-2"></i>
+                                <p class="small mt-2 mb-0">Get PDF</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row mt-5 g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-rocket text-primary display-6"></i>
+                    <h5 class="card-title mt-3">Fast & Easy</h5>
+                    <p class="card-text text-muted">
+                        Generate 50+ result sheets in seconds. No manual work required.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-palette text-primary display-6"></i>
+                    <h5 class="card-title mt-3">Customizable</h5>
+                    <p class="card-text text-muted">
+                        Customize school name, logo, colors, and grading system.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-print text-primary display-6"></i>
+                    <h5 class="card-title mt-3">Print Ready</h5>
+                    <p class="card-text text-muted">
+                        Professionally designed PDFs with auto-calculated GPA and position.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends 'result_app/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Map Columns{% endblock %}
+
+{% block extra_css %}
+<style>
+    .mapping-card {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 10px;
+    }
+    .subject-selection {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-primary text-white py-3">
+                    <h4 class="mb-0">
+                        <i class="fas fa-sliders-h me-2"></i> Map Excel Columns
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Tell us which columns contain what information. This helps us generate accurate result sheets.
+                    </div>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.name_column|as_crispy_field }}
+                                {{ form.roll_column|as_crispy_field }}
+                                {{ form.class_column|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.shift_column|as_crispy_field }}
+                                {{ form.section_column|as_crispy_field }}
+                                {{ form.semester_column|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        <div class="mt-3">
+                            {{ form.subject_columns|as_crispy_field }}
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Hold Ctrl/Cmd to select multiple subjects
+                            </small>
+                        </div>
+                        
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-check me-2"></i> Process Results
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Detected Columns -->
+            <div class="card mt-4 border-0 shadow-sm">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-3">
+                        <i class="fas fa-database me-2 text-primary"></i>
+                        Detected Columns ({{ columns|length }})
+                    </h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for column in columns %}
+                        <span class="badge bg-secondary p-2">
+                            {{ column }}
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,319 @@
+{% extends 'result_app/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Login - School Result Generator{% endblock %}
+
+{% block extra_css %}
+<style>
+    .login-container {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #e8f0fe 0%, #d4e4f7 100%);
+        padding: 20px;
+    }
+    
+    .login-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(26, 82, 118, 0.15);
+        padding: 45px 40px;
+        width: 100%;
+        max-width: 450px;
+        transition: all 0.3s ease;
+        border: none;
+    }
+    
+    .login-card:hover {
+        box-shadow: 0 30px 80px rgba(26, 82, 118, 0.2);
+        transform: translateY(-5px);
+    }
+    
+    .login-header {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+    
+    .login-header .icon {
+        font-size: 48px;
+        background: linear-gradient(135deg, #1a5276 0%, #2e86c1 100%);
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        margin-bottom: 15px;
+    }
+    
+    .login-header h3 {
+        font-weight: 700;
+        color: #1a5276;
+        margin-bottom: 5px;
+    }
+    
+    .login-header p {
+        color: #666;
+        font-size: 14px;
+    }
+    
+    .login-form .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .login-form .form-control {
+        border-radius: 10px;
+        padding: 12px 16px;
+        border: 2px solid #e9ecef;
+        transition: all 0.3s ease;
+        font-size: 15px;
+    }
+    
+    .login-form .form-control:focus {
+        border-color: #2e86c1;
+        box-shadow: 0 0 0 0.2rem rgba(46, 134, 193, 0.1);
+    }
+    
+    .login-form .form-control::placeholder {
+        color: #adb5bd;
+    }
+    
+    .login-btn {
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #1a5276 0%, #2e86c1 100%);
+        border: none;
+        color: white;
+        font-weight: 600;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .login-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(26, 82, 118, 0.3);
+    }
+    
+    .login-btn:active {
+        transform: translateY(0);
+    }
+    
+    .login-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+    
+    .login-footer {
+        text-align: center;
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    .login-footer p {
+        color: #666;
+        font-size: 13px;
+        margin-bottom: 0;
+    }
+    
+    .login-footer .highlight {
+        color: #2e86c1;
+        font-weight: 600;
+    }
+    
+    .error-message {
+        background: #fdedec;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+        padding: 12px 16px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    
+    .error-message i {
+        margin-right: 8px;
+    }
+    
+    .password-toggle {
+        position: relative;
+    }
+    
+    .password-toggle .toggle-btn {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #adb5bd;
+        cursor: pointer;
+        padding: 0;
+    }
+    
+    .password-toggle .toggle-btn:hover {
+        color: #1a5276;
+    }
+    
+    .remember-me {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+    
+    .remember-me label {
+        color: #666;
+        font-size: 14px;
+        cursor: pointer;
+    }
+    
+    .remember-me input[type="checkbox"] {
+        margin-right: 8px;
+        accent-color: #2e86c1;
+    }
+    
+    .forgot-password {
+        color: #2e86c1;
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.3s ease;
+    }
+    
+    .forgot-password:hover {
+        color: #1a5276;
+        text-decoration: underline;
+    }
+    
+    @media (max-width: 576px) {
+        .login-card {
+            padding: 30px 20px;
+        }
+        
+        .login-header .icon {
+            width: 60px;
+            height: 60px;
+            font-size: 28px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <div class="icon">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h3>Welcome Back</h3>
+            <p>Login to generate student result sheets</p>
+        </div>
+        
+        <form method="post" class="login-form">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                Invalid username or password. Please try again.
+            </div>
+            {% endif %}
+            
+            <div class="form-group">
+                <label for="id_username" class="form-label fw-semibold text-muted">Username</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-2 border-end-0" style="border-radius: 10px 0 0 10px;">
+                        <i class="fas fa-user text-muted"></i>
+                    </span>
+                    <input type="text" name="username" id="id_username" class="form-control border-start-0" 
+                           placeholder="Enter your username" autofocus required
+                           value="{{ form.username.value|default:'' }}">
+                </div>
+                {% if form.username.errors %}
+                    <small class="text-danger">{{ form.username.errors.0 }}</small>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="id_password" class="form-label fw-semibold text-muted">Password</label>
+                <div class="password-toggle">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-2 border-end-0" style="border-radius: 10px 0 0 10px;">
+                            <i class="fas fa-lock text-muted"></i>
+                        </span>
+                        <input type="password" name="password" id="id_password" class="form-control border-start-0 border-end-0" 
+                               placeholder="Enter your password" required>
+                        <button type="button" class="btn btn-light border-2 border-start-0 toggle-btn" 
+                                style="border-radius: 0 10px 10px 0;" onclick="togglePassword()">
+                            <i class="fas fa-eye" id="password-icon"></i>
+                        </button>
+                    </div>
+                </div>
+                {% if form.password.errors %}
+                    <small class="text-danger">{{ form.password.errors.0 }}</small>
+                {% endif %}
+            </div>
+            
+            <div class="remember-me">
+                <label>
+                    <input type="checkbox" name="remember" class="form-check-input">
+                    Remember me
+                </label>
+                <a href="#" class="forgot-password">Forgot Password?</a>
+            </div>
+            
+            <button type="submit" class="login-btn">
+                <i class="fas fa-sign-in-alt me-2"></i> Login
+            </button>
+        </form>
+        
+        <div class="login-footer">
+            <p>
+                Don't have an account? 
+                <span class="highlight">Contact your administrator</span>
+            </p>
+            <p class="mt-2 text-muted" style="font-size: 11px;">
+                <i class="fas fa-lock me-1"></i> Secure login
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+function togglePassword() {
+    const passwordInput = document.getElementById('id_password');
+    const icon = document.getElementById('password-icon');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.className = 'fas fa-eye-slash';
+    } else {
+        passwordInput.type = 'password';
+        icon.className = 'fas fa-eye';
+    }
+}
+
+// Form submission loading state
+document.querySelector('.login-form').addEventListener('submit', function(e) {
+    const btn = this.querySelector('.login-btn');
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Logging in...';
+    btn.disabled = true;
+});
+
+// Enter key support for login
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        const form = document.querySelector('.login-form');
+        if (form) {
+            form.submit();
+        }
+    }
+});
+</script>
+{% endblock %}

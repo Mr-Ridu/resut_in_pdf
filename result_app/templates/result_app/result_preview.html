@@ -1,0 +1,339 @@
+{% extends 'result_app/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Preview Results{% endblock %}
+
+{% block extra_css %}
+<style>
+    .preview-card {
+        transition: all 0.3s ease;
+    }
+    .preview-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    .student-row {
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .student-row:hover {
+        background-color: #f8f9fa;
+    }
+    .grade-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 14px;
+    }
+    .grade-Aplus { background: #27ae60; color: white; }
+    .grade-A { background: #2ecc71; color: white; }
+    .grade-Aminus { background: #f1c40f; color: #333; }
+    .grade-B { background: #f39c12; color: white; }
+    .grade-C { background: #e67e22; color: white; }
+    .grade-D { background: #e74c3c; color: white; }
+    .grade-F { background: #c0392b; color: white; }
+    
+    .stats-card {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        border: none;
+    }
+    .stats-number {
+        font-size: 32px;
+        font-weight: bold;
+        color: #1a5276;
+    }
+    .stats-label {
+        font-size: 14px;
+        color: #666;
+        margin-top: 5px;
+    }
+    .table-container {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+    .table-container::-webkit-scrollbar {
+        width: 8px;
+    }
+    .table-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+    .table-container::-webkit-scrollbar-thumb {
+        background: #2e86c1;
+        border-radius: 4px;
+    }
+    .table-container::-webkit-scrollbar-thumb:hover {
+        background: #1a5276;
+    }
+    .action-buttons {
+        position: sticky;
+        bottom: 0;
+        background: white;
+        padding: 20px 0;
+        border-top: 2px solid #e9ecef;
+        z-index: 10;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="fw-bold mb-0" style="color: #1a5276;">
+                        <i class="fas fa-eye me-2"></i>Result Preview
+                    </h2>
+                    <p class="text-muted mt-1">
+                        <i class="fas fa-users me-1"></i> {{ total_students }} students processed
+                    </p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="{% url 'column_mapping' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-1"></i> Back
+                    </a>
+                    <a href="{% url 'generate_results' %}" class="btn btn-success btn-lg">
+                        <i class="fas fa-file-pdf me-2"></i> Generate PDF
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="stats-number">{{ total_students }}</div>
+                <div class="stats-label">Total Students</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="stats-number">{{ students|length }}</div>
+                <div class="stats-label">Showing Preview</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="stats-number">
+                    {% with max_grade=students|dictsortreversed:"grade"|first %}
+                        {{ max_grade.grade|default:"N/A" }}
+                    {% endwith %}
+                </div>
+                <div class="stats-label">Highest Grade</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="stats-number">
+                    {% with max_gpa=students|dictsortreversed:"gpa"|first %}
+                        {{ max_gpa.gpa|floatformat:2|default:"0.00" }}
+                    {% endwith %}
+                </div>
+                <div class="stats-label">Highest GPA</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Table -->
+    <div class="card border-0 shadow-lg preview-card">
+        <div class="card-header bg-primary text-white py-3">
+            <h5 class="mb-0">
+                <i class="fas fa-list me-2"></i> Student Results Preview
+                <span class="badge bg-light text-primary ms-2">{{ students|length }} of {{ total_students }} shown</span>
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-container">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light sticky-top">
+                        <tr>
+                            <th>#</th>
+                            <th>Roll</th>
+                            <th>Name</th>
+                            <th>Class</th>
+                            <th>Section</th>
+                            <th>Total</th>
+                            <th>Average</th>
+                            <th>Grade</th>
+                            <th>GPA</th>
+                            <th>Position</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                        <tr class="student-row">
+                            <td>{{ forloop.counter }}</td>
+                            <td><strong>{{ student.roll }}</strong></td>
+                            <td>{{ student.name }}</td>
+                            <td>{{ student.class }}</td>
+                            <td>{{ student.section }}</td>
+                            <td><strong>{{ student.total }}</strong></td>
+                            <td>{{ student.average|floatformat:1 }}</td>
+                            <td>
+                                <span class="grade-badge grade-{{ student.grade|cut:'+'|cut:'-' }}">
+                                    {{ student.grade }}
+                                </span>
+                            </td>
+                        <td>{{ student.gpa|floatformat:2|default:"0.00" }}</td>                            <td>
+                                <span class="badge bg-primary rounded-pill">
+                                    #{{ student.position }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="10" class="text-center py-4">
+                                <i class="fas fa-info-circle text-muted me-2"></i>
+                                No students found. Please upload and process data first.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer bg-light">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Showing first {{ students|length }} students. All {{ total_students }} students will be included in the PDF.
+                    </small>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <span class="badge bg-info me-2">
+                        <i class="fas fa-print me-1"></i> Print Ready
+                    </span>
+                    <span class="badge bg-success">
+                        <i class="fas fa-check-circle me-1"></i> {{ total_students }} Students
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subject Details Preview -->
+    <div class="card border-0 shadow-lg mt-4 preview-card">
+        <div class="card-header bg-secondary text-white py-3">
+            <h5 class="mb-0">
+                <i class="fas fa-book me-2"></i> Subject-wise Performance
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for student in students|slice:":3" %}
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h6 class="fw-bold text-primary">{{ student.name }}</h6>
+                            <small class="text-muted">Roll: {{ student.roll }}</small>
+                            <hr>
+                            <div class="row g-1">
+                                {% for subject, marks in student.subjects.items %}
+                                <div class="col-6">
+                                    <small class="text-muted">{{ subject }}:</small>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <strong>{{ marks }}</strong>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between">
+                                <small class="text-muted">Total:</small>
+                                <strong>{{ student.total }}</strong>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <small class="text-muted">Grade:</small>
+                                <span class="grade-badge grade-{{ student.grade|cut:'+'|cut:'-' }}" style="font-size: 12px;">
+                                    {{ student.grade }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% if students|length > 3 %}
+            <div class="text-center text-muted">
+                <small>
+                    <i class="fas fa-ellipsis-h me-1"></i>
+                    Showing 3 of {{ students|length }} students
+                </small>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="alert alert-info mb-0">
+                    <i class="fas fa-info-circle me-2"></i>
+                    The PDF will include all {{ total_students }} students with full details.
+                </div>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <a href="{% url 'settings' %}" class="btn btn-primary me-2">
+                    <i class="fas fa-cog me-1"></i> Settings
+                </a>
+                <a href="{% url 'generate_results' %}" class="btn btn-success btn-lg">
+                    <i class="fas fa-file-pdf me-2"></i> Generate Full PDF
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-scroll to table if coming from mapping
+        if (window.location.hash === '#table') {
+            document.querySelector('.table-container').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+        
+        // Highlight row on click
+        document.querySelectorAll('.student-row').forEach(row => {
+            row.addEventListener('click', function() {
+                // Remove existing highlights
+                document.querySelectorAll('.student-row').forEach(r => {
+                    r.style.backgroundColor = '';
+                });
+                // Highlight clicked row
+                this.style.backgroundColor = '#ebf5fb';
+            });
+        });
+        
+        // Grade color mapping for display
+        const gradeMap = {
+            'A+': 'grade-Aplus',
+            'A': 'grade-A',
+            'A-': 'grade-Aminus',
+            'B': 'grade-B',
+            'C': 'grade-C',
+            'D': 'grade-D',
+            'F': 'grade-F'
+        };
+        
+        document.querySelectorAll('.grade-badge').forEach(badge => {
+            const grade = badge.textContent.trim();
+            if (gradeMap[grade]) {
+                badge.className = `grade-badge ${gradeMap[grade]}`;
+            }
+        });
+    });
+</script>
+{% endblock %}
