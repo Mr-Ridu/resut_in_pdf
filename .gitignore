@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Django
+*.log
+staticfiles/
+
+# PyInstaller desktop builds
+build/
+dist/
+*.spec
+
+# OS
+.DS_Store
+Thumbs.db

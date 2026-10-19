@@ -1,15 +1,19 @@
 {% extends 'result_app/base.html' %}
 {% load static %}
 
-{% block title %}Home - School Result Generator{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block content %}
 <div class="container py-5">
     <div class="row align-items-center min-vh-75">
         <div class="col-lg-6">
-            <h1 class="display-4 fw-bold mb-4" style="color: #1a5276;">
+            <div class="d-inline-flex align-items-center gap-2 mb-3 px-3 py-1 rounded-pill" style="background: #C1E8FF;">
+                <img src="{% static 'result_app/images/pixeliq_logo.png' %}" alt="PixelIQ" style="height: 18px; width: auto;">
+                <span class="fw-bold small" style="color: #021024;">Free tool by pixeliqit.com</span>
+            </div>
+            <h1 class="display-4 fw-bold mb-4" style="color: #021024;">
                 Generate Student Result Sheets
-                <span class="d-block text-primary">in One Click</span>
+                <span class="d-block" style="color: #5483B3;">in One Click</span>
             </h1>
             <p class="lead mb-4">
                 Upload your Excel file with student results and get professionally designed, 

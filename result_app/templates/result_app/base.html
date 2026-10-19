@@ -1,9 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Result Generator - {% block title %}{% endblock %}</title>
+    <title>PixelIQ Result Generator · {% block title %}Home{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{% static 'result_app/images/pixeliq_logo.png' %}">
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -11,18 +13,17 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
-    {% load static %}
     <link rel="stylesheet" href="{% static 'result_app/css/style.css' %}">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
     <!-- Navigation -->
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #1a5276 0%, #2e86c1 100%);">
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm border-bottom">
     <div class="container">
-        <a class="navbar-brand" href="{% url 'index' %}">
-            <i class="fas fa-graduation-cap me-2"></i>
-            Result Generator
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}" title="PixelIQ Result Generator">
+            <img src="{% static 'result_app/images/pixeliq_logo.png' %}" alt="PixelIQ" style="height: 30px; width: auto;">
+            <span class="ms-2 fw-bold" style="color: #021024; font-size: 1.05rem; letter-spacing: -0.2px;">Result Generator</span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
@@ -83,14 +84,18 @@
     {% block content %}{% endblock %}
 
     <!-- Footer -->
-    <footer class="footer mt-5 py-4 bg-light">
+    <footer class="footer mt-5 py-4 bg-light border-top">
         <div class="container text-center">
+            <p class="mb-2">
+                <img src="{% static 'result_app/images/pixeliq_logo.png' %}" alt="PixelIQ" style="height: 22px; width: auto;">
+            </p>
             <p class="text-muted mb-0">
                 <small>
-                    Generated using School Result Generator. 
-                    Need complete school management system? 
-                    <a href="#" class="text-primary fw-bold">Contact us</a> or 
-                    <a href="#" class="text-primary fw-bold">Upgrade now</a>
+                    © {% now "Y" %} <a href="https://pixeliqit.com" target="_blank" rel="noopener" class="fw-bold">PixelIQ · pixeliqit.com</a>
+                    &mdash; free <span class="fw-bold">PixelIQ Result Generator</span>.
+                    Need a complete institute management system?
+                    <a href="https://pixeliqit.com" target="_blank" rel="noopener" class="fw-bold">Talk to us</a> or
+                    <a href="https://pixeliqit.com" target="_blank" rel="noopener" class="fw-bold">Explore our products</a>.
                 </small>
             </p>
         </div>

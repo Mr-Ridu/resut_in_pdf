@@ -26,7 +26,7 @@
         transition: all 0.3s ease;
     }
     .preview-box:hover {
-        border-color: #2e86c1;
+        border-color: #5483B3;
         background: #f8f9fa;
     }
     .preview-box img {
@@ -60,7 +60,7 @@
     .form-section-title {
         font-size: 16px;
         font-weight: 600;
-        color: #1a5276;
+        color: #021024;
         margin-bottom: 15px;
         padding-bottom: 10px;
         border-bottom: 2px solid #e9ecef;
@@ -83,7 +83,7 @@
         font-size: 14px;
     }
     .grading-example th {
-        background: #1a5276;
+        background: #021024;
         color: white;
         padding: 8px;
         text-align: center;
@@ -105,7 +105,7 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h2 class="fw-bold mb-0" style="color: #1a5276;">
+                    <h2 class="fw-bold mb-0" style="color: #021024;">
                         <i class="fas fa-cog me-2"></i>School Settings
                     </h2>
                     <p class="text-muted mt-1">
@@ -215,8 +215,8 @@
                                     {{ form.primary_color|as_crispy_field }}
                                     <div class="mt-2">
                                         <strong>Preview:</strong>
-                                        <span class="color-preview" style="background: #1a5276;"></span>
-                                        <span class="color-preview" style="background: #2e86c1;"></span>
+                                        <span class="color-preview" style="background: #021024;"></span>
+                                        <span class="color-preview" style="background: #5483B3;"></span>
                                         <span class="color-preview" style="background: #1a6e3e;"></span>
                                         <span class="color-preview" style="background: #27ae60;"></span>
                                         <span class="color-preview" style="background: #7a1a1a;"></span>
@@ -365,11 +365,11 @@
                 </div>
                 <div class="card-body text-center">
                     <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
-                        <h6 style="color: #1a5276;">{{ form.instance.school_name|default:"Your School Name" }}</h6>
+                        <h6 style="color: #021024;">{{ form.instance.school_name|default:"Your School Name" }}</h6>
                         <small class="text-muted">{{ form.instance.school_address|default:"Your School Address" }}</small>
                         <hr>
                         <div class="d-flex justify-content-center gap-3">
-                            <span class="badge" style="background: {{ form.instance.primary_color|default:'#1a5276' }}; color: white;">
+                            <span class="badge" style="background: {{ form.instance.primary_color|default:'#021024' }}; color: white;">
                                 {{ form.instance.paper_size|default:"A4" }} / {{ form.instance.orientation|default:"Portrait" }}
                             </span>
                             <span class="badge bg-secondary">
@@ -377,9 +377,9 @@
                             </span>
                         </div>
                         <div class="mt-2">
-                            <span class="color-preview" style="background: {{ form.instance.primary_color|default:'#1a5276' }};"></span>
-                            <span class="color-preview" style="background: {{ form.instance.primary_color|default:'#1a5276' }}80;"></span>
-                            <span class="color-preview" style="background: {{ form.instance.primary_color|default:'#1a5276' }}40;"></span>
+                            <span class="color-preview" style="background: {{ form.instance.primary_color|default:'#021024' }};"></span>
+                            <span class="color-preview" style="background: {{ form.instance.primary_color|default:'#021024' }}80;"></span>
+                            <span class="color-preview" style="background: {{ form.instance.primary_color|default:'#021024' }}40;"></span>
                         </div>
                         <small class="text-muted mt-2 d-block">
                             <i class="fas fa-paint-brush me-1"></i> Primary color scheme
@@ -401,13 +401,13 @@
             colorSelect.addEventListener('change', function() {
                 const selectedColor = this.value;
                 const colorMap = {
-                    'blue': '#1a5276',
+                    'blue': '#021024',
                     'green': '#1a6e3e',
                     'red': '#7a1a1a',
                     'purple': '#4a1a7a',
                     'orange': '#7a4a1a'
                 };
-                const color = colorMap[selectedColor] || '#1a5276';
+                const color = colorMap[selectedColor] || '#021024';
                 
                 // Update preview colors
                 const previewColors = document.querySelectorAll('.color-preview');

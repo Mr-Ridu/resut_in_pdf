@@ -2,7 +2,7 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-{% block title %}Login - School Result Generator{% endblock %}
+{% block title %}Login{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -18,7 +18,7 @@
     .login-card {
         background: white;
         border-radius: 20px;
-        box-shadow: 0 20px 60px rgba(26, 82, 118, 0.15);
+        box-shadow: 0 20px 60px rgba(2, 16, 36, 0.15);
         padding: 45px 40px;
         width: 100%;
         max-width: 450px;
@@ -27,7 +27,7 @@
     }
     
     .login-card:hover {
-        box-shadow: 0 30px 80px rgba(26, 82, 118, 0.2);
+        box-shadow: 0 30px 80px rgba(2, 16, 36, 0.2);
         transform: translateY(-5px);
     }
     
@@ -38,7 +38,7 @@
     
     .login-header .icon {
         font-size: 48px;
-        background: linear-gradient(135deg, #1a5276 0%, #2e86c1 100%);
+        background: linear-gradient(135deg, #021024 0%, #5483B3 100%);
         width: 80px;
         height: 80px;
         border-radius: 50%;
@@ -51,7 +51,7 @@
     
     .login-header h3 {
         font-weight: 700;
-        color: #1a5276;
+        color: #021024;
         margin-bottom: 5px;
     }
     
@@ -73,8 +73,8 @@
     }
     
     .login-form .form-control:focus {
-        border-color: #2e86c1;
-        box-shadow: 0 0 0 0.2rem rgba(46, 134, 193, 0.1);
+        border-color: #5483B3;
+        box-shadow: 0 0 0 0.2rem rgba(84, 131, 179, 0.1);
     }
     
     .login-form .form-control::placeholder {
@@ -85,7 +85,7 @@
         width: 100%;
         padding: 12px;
         border-radius: 10px;
-        background: linear-gradient(135deg, #1a5276 0%, #2e86c1 100%);
+        background: linear-gradient(135deg, #021024 0%, #5483B3 100%);
         border: none;
         color: white;
         font-weight: 600;
@@ -96,7 +96,7 @@
     
     .login-btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(26, 82, 118, 0.3);
+        box-shadow: 0 8px 25px rgba(2, 16, 36, 0.3);
     }
     
     .login-btn:active {
@@ -122,7 +122,7 @@
     }
     
     .login-footer .highlight {
-        color: #2e86c1;
+        color: #5483B3;
         font-weight: 600;
     }
     
@@ -157,7 +157,7 @@
     }
     
     .password-toggle .toggle-btn:hover {
-        color: #1a5276;
+        color: #021024;
     }
     
     .remember-me {
@@ -175,18 +175,18 @@
     
     .remember-me input[type="checkbox"] {
         margin-right: 8px;
-        accent-color: #2e86c1;
+        accent-color: #5483B3;
     }
     
     .forgot-password {
-        color: #2e86c1;
+        color: #5483B3;
         text-decoration: none;
         font-size: 14px;
         transition: color 0.3s ease;
     }
     
     .forgot-password:hover {
-        color: #1a5276;
+        color: #021024;
         text-decoration: underline;
     }
     
@@ -208,11 +208,15 @@
 <div class="login-container">
     <div class="login-card">
         <div class="login-header">
+            <img src="{% static 'result_app/images/pixeliq_logo.png' %}" alt="PixelIQ" style="height: 34px; width: auto;" class="mb-3">
             <div class="icon">
                 <i class="fas fa-graduation-cap"></i>
             </div>
             <h3>Welcome Back</h3>
             <p>Login to generate student result sheets</p>
+            <p class="mt-1 mb-0" style="font-size: 12px; color: #5483B3;">
+                <i class="fas fa-bolt me-1"></i> PixelIQ Result Generator &middot; pixeliqit.com
+            </p>
         </div>
         
         <form method="post" class="login-form">
@@ -278,7 +282,10 @@
                 Don't have an account? 
                 <span class="highlight">Contact your administrator</span>
             </p>
-            <p class="mt-2 text-muted" style="font-size: 11px;">
+            <p class="mt-2" style="font-size: 11px; color: #999;">
+                Powered by <a href="https://pixeliqit.com" target="_blank" rel="noopener" style="color: #5483B3; font-weight: 600; text-decoration: none;">PixelIQ</a> &middot; pixeliqit.com
+            </p>
+            <p class="mt-1 text-muted" style="font-size: 11px;">
                 <i class="fas fa-lock me-1"></i> Secure login
             </p>
         </div>

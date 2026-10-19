@@ -1,4 +1,4 @@
-// Main JavaScript for School Result Generator
+// Main JavaScript for PixelIQ Result Generator
 
 document.addEventListener('DOMContentLoaded', function() {
     // Auto-dismiss alerts after 5 seconds
@@ -167,4 +167,4 @@ function trackPDFDownload(studentCount) {
     }
 }
 
-console.log('School Result Generator loaded successfully!');
+console.log('PixelIQ Result Generator loaded successfully!');

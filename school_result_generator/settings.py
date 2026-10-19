@@ -2,15 +2,41 @@
 
 
 import os
+import sys
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-x)a(r%h0^jh3qt+p5=j!@p&wotn0=e&ob%g2e0gbugw_go(ka2'
+# ---------------------------------------------------------------------------
+# PixelIQ Result Generator — desktop (packaged) mode
+# When frozen by PyInstaller, code lives in a read-only temp bundle, so all
+# writable data (database, uploaded media) is redirected to a per-user data
+# directory instead. See desktop/launch.py.
+# ---------------------------------------------------------------------------
+FROZEN = getattr(sys, 'frozen', False)
+
+if FROZEN:
+    APP_NAME = 'PixelIQResultGenerator'
+    if sys.platform == 'win32':
+        DATA_DIR = Path(os.environ.get('APPDATA', Path.home())) / APP_NAME
+    elif sys.platform == 'darwin':
+        DATA_DIR = Path.home() / 'Library' / 'Application Support' / APP_NAME
+    else:
+        DATA_DIR = Path(os.environ.get('XDG_DATA_HOME', Path.home() / '.local' / 'share')) / APP_NAME
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    BASE_DIR = DATA_DIR
+
+SECRET_KEY = os.environ.get(
+    'DJANGO_SECRET_KEY',
+    'django-insecure-x)a(r%h0^jh3qt+p5=j!@p&wotn0=e&ob%g2e0gbugw_go(ka2',
+)
 
 DEBUG = True
 
+# The desktop app serves only loopback traffic; the web deployment keeps '*' 
 ALLOWED_HOSTS = ['*']
+if FROZEN:
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -33,6 +59,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# Desktop mode: the local launcher signs the user in automatically so the
+# packaged app opens straight into the workspace (loopback-only server).
+if os.environ.get('PIXELIQ_DESKTOP') == '1':
+    MIDDLEWARE = MIDDLEWARE + [
+        'school_result_generator.desktop_auth.DesktopAutoLoginMiddleware',
+    ]
 
 ROOT_URLCONF = 'school_result_generator.urls'
 
@@ -85,6 +118,7 @@ STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
+# In desktop mode BASE_DIR is the per-user data dir, so media is writable.
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
