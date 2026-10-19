@@ -26,6 +26,7 @@ jobs:
         with:
           python-version: '3.12'
           cache: pip
+          cache-dependency-path: requirments.txt
 
       - name: Install dependencies
         run: |
